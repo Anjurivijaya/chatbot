@@ -1,4 +1,3 @@
-!pip install PyPDF2
 import os
 import sys
 import streamlit as st
