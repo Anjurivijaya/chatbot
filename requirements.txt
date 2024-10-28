@@ -4,3 +4,4 @@ langchain
 faiss-cpu
 google-generative-ai
 python-dotenv
+git+https://github.com/google/generative-ai-python.git
