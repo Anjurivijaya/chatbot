@@ -105,7 +105,7 @@ def main():
 
     # Specify the PDF file paths
     pdf_file_paths = [
-        "/content/VRSEC-Vijaya.pdf",  # Replace with your actual PDF paths
+        "VRSEC-Vijaya.pdf",  # Replace with your actual PDF paths
         # Add more paths as needed
     ]
 
