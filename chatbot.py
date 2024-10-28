@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 import google.generativeai as genai
 
 ## Set the Google API key directly in the code
-GOOGLE_API_KEY = "AIzaSyCklcNKA2J9WVN6rM-luGongQWSY5-a0eo"
+GOOGLE_API_KEY = "AIzaSyAsnH_vjbRiBG3C8PD9-40DTK4NCBfDZTg"
 os.environ["GOOGLE_API_KEY"] = GOOGLE_API_KEY
 
 # Set up Google Generative AI
