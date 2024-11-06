@@ -8,12 +8,13 @@ from langchain.chains.question_answering import load_qa_chain
 from langchain.prompts import PromptTemplate
 from dotenv import load_dotenv
 import google.generativeai as genai
+from langchain.vectorstores import FAISS
 
-## Set the Google API key directly in the code
-GOOGLE_API_KEY = "AIzaSyAsnH_vjbRiBG3C8PD9-40DTK4NCBfDZTg"
-os.environ["GOOGLE_API_KEY"] = GOOGLE_API_KEY
+# Directly insert your Google API key here
+GOOGLE_API_KEY = "AIzaSyCWmWlwM4R3Otqp0Go51z9EVCNfEgWa2rM"  # Replace with your actual API key
 
 # Set up Google Generative AI
+os.environ["GOOGLE_API_KEY"] = GOOGLE_API_KEY
 genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
 
 # Function to extract text from PDF files
@@ -56,15 +57,7 @@ def get_conversational_chain():
 
 # Function to handle user input and generate responses
 def user_input(user_question):
-    greetings = ["hi", "hello", "hey", "good morning", "good afternoon", "good evening"]
-    
     normalized_question = user_question.lower()
-    
-    # Check if the question is a greeting
-    if any(greet in normalized_question for greet in greetings):
-        return "Hello! How can I assist you today?"
-
-    # Normalization for specific terms
     keyword_mapping = {
         "hod": "head",
         "cse": "computer science and engineering",
@@ -87,16 +80,17 @@ def user_input(user_question):
 
     return response["output_text"]
 
-# Main function to run the Streamlit app
 def main():
-    st.set_page_config(page_title="VRSEC College Chatbot", layout="wide")
+    st.set_page_config(page_title="🎓 VRSEC College Chatbot", layout="wide")
     
     # Title of the Streamlit app
     st.title("🎓 VRSEC College Chatbot")
 
-    # Initialize session state for chat messages
+    # Initialize session state for chat messages and input
     if "messages" not in st.session_state:
         st.session_state.messages = []
+    if "input" not in st.session_state:
+        st.session_state.input = ""  # Initialize input session state
 
     # Display chat history
     for message in st.session_state.messages:
@@ -104,18 +98,37 @@ def main():
             st.markdown(message["content"])
 
     # Specify the PDF file paths
-    pdf_file_paths = [
-        "VRSEC.pdf",  # Replace with your actual PDF paths
-        # Add more paths as needed
-    ]
+    pdf_file_paths = ["Final.pdf"]  # Use forward slashes
 
     # Process the specified PDF files
     raw_text = get_pdf_text(pdf_file_paths)
     text_chunks = get_text_chunks(raw_text)
     get_vector_store(text_chunks)
 
-    # Input box for user query
-    if prompt := st.chat_input("Ask me anything about VRSEC (e.g., 'What programs are offered?', 'Who is the principal?')"):
+    # Define suggestions
+    suggestions = [
+        "🎓 What programs are offered?",
+        "👨‍🏫 Who is the principal?",
+        "🌟 What is the vision of VRSEC?",
+        "🏛 Tell me about the college?",
+        "📚 What academic accreditations does VRSEC hold?"
+    ]
+
+    # Display suggestion buttons in a horizontal layout
+    st.subheader("Quick Suggestions:")
+    cols = st.columns(len(suggestions))
+    
+    for i, suggestion in enumerate(suggestions):
+        if cols[i].button(suggestion):
+            st.session_state["input"] = suggestion
+
+    # Input box for user query at the bottom right, pre-filled with suggestion if clicked
+    prompt = st.chat_input("Ask me anything about VRSEC (e.g., 'What programs are offered?', 'Who is the principal?')") or st.session_state.input
+
+    if prompt:
+        # Clear the input session state after question is asked
+        st.session_state.input = ""
+        
         # Add user message to session state
         st.session_state.messages.append({"role": "user", "content": prompt})
         
