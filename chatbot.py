@@ -6,12 +6,10 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGener
 from langchain.vectorstores import FAISS
 from langchain.chains.question_answering import load_qa_chain
 from langchain.prompts import PromptTemplate
-from dotenv import load_dotenv
 import google.generativeai as genai
-from langchain.vectorstores import FAISS
 
 # Directly insert your Google API key here
-GOOGLE_API_KEY = "AIzaSyCWmWlwM4R3Otqp0Go51z9EVCNfEgWa2rM"  # Replace with your actual API key
+GOOGLE_API_KEY = "AIzaSyCLaDQlRsT6bEU8mqq7YlddQ3OPoWZ-FAA"  # Replace with your actual API key
 
 # Set up Google Generative AI
 os.environ["GOOGLE_API_KEY"] = GOOGLE_API_KEY
@@ -89,6 +87,7 @@ def main():
     # Initialize session state for chat messages and input
     if "messages" not in st.session_state:
         st.session_state.messages = []
+    
     if "input" not in st.session_state:
         st.session_state.input = ""  # Initialize input session state
 
@@ -97,15 +96,17 @@ def main():
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
-    # Specify the PDF file paths
-    pdf_file_paths = ["Final.pdf"]  # Use forward slashes
+    # Specify the PDF file paths (update this path accordingly)
+    pdf_file_paths = ["Cvbn.pdf"]  # Use forward slashes
 
     # Process the specified PDF files
     raw_text = get_pdf_text(pdf_file_paths)
     text_chunks = get_text_chunks(raw_text)
+    
+    # Create or update vector store with new chunks of text
     get_vector_store(text_chunks)
 
-    # Define suggestions
+    # Define suggestions for quick access
     suggestions = [
         "🎓 What programs are offered?",
         "👨‍🏫 Who is the principal?",
@@ -116,6 +117,7 @@ def main():
 
     # Display suggestion buttons in a horizontal layout
     st.subheader("Quick Suggestions:")
+    
     cols = st.columns(len(suggestions))
     
     for i, suggestion in enumerate(suggestions):
@@ -146,6 +148,6 @@ def main():
         # Add assistant response to session state
         st.session_state.messages.append({"role": "assistant", "content": response})
 
-# Run the app
+# Run the app when executed directly
 if __name__ == "__main__":
-    main()
+   main()
