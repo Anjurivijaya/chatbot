@@ -97,7 +97,7 @@ def main():
             st.markdown(message["content"])
 
     # Specify the PDF file paths (update this path accordingly)
-    pdf_file_paths = ["Cvbn.pdf"]  # Use forward slashes
+    pdf_file_paths = ["vbn.pdf"]  # Use forward slashes
 
     # Process the specified PDF files
     raw_text = get_pdf_text(pdf_file_paths)
