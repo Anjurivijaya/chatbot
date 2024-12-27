@@ -9,7 +9,7 @@ from langchain.prompts import PromptTemplate
 import google.generativeai as genai
 
 # Directly insert your Google API key here
-GOOGLE_API_KEY = "AIzaSyCLaDQlRsT6bEU8mqq7YlddQ3OPoWZ-FAA"  # Replace with your actual API key
+GOOGLE_API_KEY = "AIzaSyBwCIiE1KAPWS4vRxEyE7T_Lv1-7YKclMU"  # Replace with your actual API key
 
 # Set up Google Generative AI
 os.environ["GOOGLE_API_KEY"] = GOOGLE_API_KEY
